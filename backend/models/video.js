@@ -2,7 +2,14 @@ const mongoose = require('mongoose');
 const {Schema} = mongoose;
 const VideoSchema = new Schema({
     
-
+    filename: {
+        type: String,
+        required: true
+    },
+    author:{
+        type: String,
+        required: true
+    }
     
 })
 
