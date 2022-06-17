@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Link from 'next/link';
 import styles from '../../styles/post.module.css'
-import Navbar from '../../components/Navbar/Navbar'
+import Navbar from '../../components/Navbar'
 
 export default function post() {
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from '../../styles/Navbar.module.css'
+import styles from '../styles/Navbar.module.css'
 import Link from 'next/link'
 
 export default function Navbar() {
@@ -19,6 +19,11 @@ export default function Navbar() {
         <li>
           <Link href="/">
             <a>About</a>
+          </Link>
+        </li>
+        <li>
+          <Link href="/">
+            <a></a>
           </Link>
         </li>
 
