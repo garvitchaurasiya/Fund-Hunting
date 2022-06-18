@@ -58,10 +58,28 @@ router.post('/placebid',fetchuser, async(req, res)=>{
     
     try {
         const {filename, bidamount, bidequity} = req.body;
-        const video = await Video.findOneAndUpdate({filename: filename}, 
+        const bidplacer = req.user.name;
+        await Video.findOneAndUpdate({filename: filename}, 
             {$push: {
-                "bids": {amount: bidamount, equity: bidequity}
+                "bids": {amount: bidamount, equity: bidequity, bidplacer}
             }});
+        const video = await Video.findOne({filename});
+        console.log(video.bids);
+        res.json({bids: video.bids})
+
+    } catch (error) {
+        console.error(error.message);
+        return res.status(400).json({success: false, error: "Internal Server Error"});
+    }
+
+})
+
+router.post('/getbids',fetchuser, async(req, res)=>{
+    
+    try {
+
+        const video = await Video.findOne({filename: req.body.filename});
+        res.json({bids: video.bids});
 
     } catch (error) {
         console.error(error.message);

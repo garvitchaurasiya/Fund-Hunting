@@ -37,7 +37,7 @@ export default function Home() {
       <div className={styles.renderCards}>
         {
           allVideos.map((element, index) => {
-            return <Card key={index} filename={element.filename} author={element.author} />
+            return <Card key={index} filename={element.filename} author={element.author} amount={element.amount} equity={element.equity} />
           })
         }
       </div>

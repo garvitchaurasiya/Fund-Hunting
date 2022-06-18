@@ -95,15 +95,6 @@ router.post('/getuser', fetchuser, async(req, res)=>{
     }
 
 })
-router.post('/placebid',fetchuser, async(req, res)=>{
-    
-    try {
-        
-    } catch (error) {
-        console.error(error.message);
-        return res.status(400).json({success, error: "Internal Server Error"});
-    }
 
-})
 
 module.exports = router;
