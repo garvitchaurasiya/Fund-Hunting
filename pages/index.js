@@ -3,11 +3,13 @@ import React, { useState, useEffect } from 'react'
 import Navbar from '../components/Navbar'
 import Card from "../components/Card"
 import styles from "../styles/Home.module.css";
+import VideoModal from '../components/VideoModal';
 
 export default function Home() {
 
+
+
   const [allVideos, setAllVideos] = useState([]);
-  const allvideos = [];
 
   const getAllVideos = async () => {
     const response = await fetch("http://localhost:5000/api/video/getvideos", {
@@ -29,13 +31,13 @@ export default function Home() {
   }, []);
 
   return (
-    <div style={{"backgroundColor":"#fafafa"}}>
+    <div style={{ "backgroundColor": "#fafafa" }}>
       <Navbar />
 
       <div className={styles.renderCards}>
         {
           allVideos.map((element, index) => {
-            return <Card filename={element.filename} author={element.author} />
+            return <Card key={index} filename={element.filename} author={element.author} />
           })
         }
       </div>

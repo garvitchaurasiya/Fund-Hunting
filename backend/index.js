@@ -17,7 +17,6 @@ app.get('/', (req, res) => {
 
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/video', require('./routes/video'));
-app.use('/api/create', require('./routes/create'));
 
 
 app.listen(port, () => {

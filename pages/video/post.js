@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Link from 'next/link';
+import Router from 'next/router';
 import styles from '../../styles/post.module.css'
 import Navbar from '../../components/Navbar'
 
@@ -23,27 +23,23 @@ export default function post() {
 
         let formData = new FormData();
         formData.append('file', file);
+        formData.append('user', localStorage.getItem('user'));
+        formData.append('amount', state.amount);
+        formData.append('equity', state.equity);
         const response = await fetch("http://localhost:5000/api/video/upload", {
             method: "POST",
             body: formData
         });
         const json = await response.json();
-        console.log(json);
+        if(json.success){
+            Router.push({pathname:'/'})
+        }
+
 
     }
 
     return (
         <div>
-            {/* <form onSubmit={handleOnSubmit} encType="multipart/form-data">
-                <input type="file" filename="file" onChange={onChangeFile} />
-                <button type='submit'>Upload</button>
-
-                <input type="file" id="styles.actual-btn" hidden />
-                <label htmlFor="actual-btn">Choose File</label>
-
-
-            </form> */}
-
             <Navbar/>
 
                 <div className={styles.container}  >
@@ -58,9 +54,9 @@ export default function post() {
                                     <input type="file" filename="file" onChange={onChangeFile} />
 
                                     <label>Ask</label>
-                                    <input type="text" name="amount" className={styles.input} onChange={onChange} placeholder='1.25 Lakh' />
+                                    <input type="text" name="amount" className={styles.input} onChange={onChange} value={state.amount} placeholder='1.25 Lakh' />
                                     <label>For</label>
-                                    <input type="text" name="equity" className={styles.input} onChange={onChange} placeholder='7%' />
+                                    <input type="text" name="equity" className={styles.input} onChange={onChange} value={state.equity} placeholder='7%' />
 
                                     <button type='submit' className={styles.button}>Upload</button>
 

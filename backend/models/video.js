@@ -9,6 +9,17 @@ const VideoSchema = new Schema({
     author:{
         type: String,
         required: true
+    },
+    amount: {
+        type: String,
+        required: true
+    },
+    equity: {
+        type: String,
+        required: true
+    },
+    bids: {
+        type: Array
     }
     
 })
