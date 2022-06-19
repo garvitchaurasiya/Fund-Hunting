@@ -1,5 +1,40 @@
+.container{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: white;
+    border-bottom: 1px solid rgb(235, 235, 235);
+    position: fixed;
+    width: 100vw;
+    z-index: 1;
+}
+.fundhunting{
+    width: 30vw;
+    display: flex;
+    justify-content: center;
+    font-family:cursive;
+    font-weight: bold;
+    font-size: 20px;
+}
+.search{
+    width: 30vw;
+    display: flex;
+    justify-content: center;
+}
+.search input{
+    width: 250px;
+    height: 35px;
+    border: none;
+    background-color: #f1f1f1;
+    padding-left: 5px;
+    border-radius: 10px;
+}
 .list {
+    width: 30vw;
     list-style: none;
     display: flex;
     justify-content: space-evenly;
+}
+.list li{
+    cursor: pointer;
 }

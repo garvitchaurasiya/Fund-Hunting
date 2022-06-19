@@ -37,7 +37,7 @@ router.post('/createaccount', async (req, res)=>{
         console.log(user.email);
         const authToken = jwt.sign(data, JWT_SECRET);
 
-        res.json({success, authToken: authToken, user: user.email});
+        res.json({success, authToken: authToken, user: user.name});
 
     } catch (error) {
         console.error(error.message);

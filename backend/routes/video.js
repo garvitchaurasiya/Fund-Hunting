@@ -24,7 +24,7 @@ var storage = multer.diskStorage({
 
 var upload = multer({ storage });
 
-router.post('/upload', upload.single('file'), async (req, res)=>{
+router.post('/upload', upload.single('file') ,async (req, res)=>{
     // upload(req, res, err => {
     //     if(err){
     //         console.log(err);
@@ -44,6 +44,73 @@ router.post('/upload', upload.single('file'), async (req, res)=>{
 
     console.log(req.file);
     res.json({success:true});
+})
+
+router.post('/like', fetchuser, async (req, res)=>{
+    
+    try {
+        const {filename} = req.body;
+        await Video.findOneAndUpdate({filename: filename}, 
+            {$push: {
+                "likes": {user: req.user.name}
+            }});
+        const video = await Video.findOne({filename});
+        res.json({likes: video.likes});
+
+    } catch (error) {
+        console.error(error.message);
+        return res.status(400).json({success: false, error: "Internal Server Error"});
+    }
+})
+
+router.post('/dislike', fetchuser, async (req, res)=>{
+    
+    try {
+        const {filename} = req.body;
+        await Video.findOneAndUpdate({filename: filename}, 
+            {$pull: {
+                "likes": {user: req.user.name}
+            }});
+        const video = await Video.findOne({filename});
+        res.json({likes: video.likes});
+
+    } catch (error) {
+        console.error(error.message);
+        return res.status(400).json({success: false, error: "Internal Server Error"});
+    }
+
+})
+
+
+router.post('/alreadyliked', fetchuser, async (req, res)=>{
+    
+    try {
+        const {filename} = req.body;
+        const isLiked = await Video.findOne({filename: filename, likes: {user:req.user.name} })
+        res.json({isLiked});
+
+    } catch (error) {
+        console.error(error.message);
+        return res.status(400).json({success: false, error: "Internal Server Error"});
+    }
+
+})
+
+router.post('/getlikes', async (req, res)=>{
+    
+    try {
+        const {filename} = req.body;
+        
+        const video = await Video.findOne({filename});
+
+        res.json({totalLikes: video.likes.length});
+
+    } catch (error) {
+        console.error(error.message);
+        return res.status(400).json({success: false, error: "Internal Server Error"});
+    }
+    
+
 })
 
 router.get('/getvideos', async (req, res)=>{

@@ -26,7 +26,7 @@ export default function signup() {
         if (json.success) {
             // Save the auth Token and redirect
             localStorage.setItem('token', json.authToken);
-            // navigate1('/enterotp', {state:{email}});
+            localStorage.setItem('user', json.user);
             Router.push({pathname: '/'})
 
         }

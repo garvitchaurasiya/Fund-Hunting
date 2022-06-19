@@ -1,23 +1,25 @@
 .container{
-    width: 350px;
-    border: 1px solid rgb(211, 211, 211);
-    border-radius: 5px;
+    width: 540px;
+    /* border: 1px solid rgb(211, 211, 211);
+    border-radius: 8px; */
     margin-top: 10px;
 }
 .video{
-    background-color: #f9f9f9;
+    background-color: black;
     margin-bottom: 0;
 }
-
-.companyName{
+.videos{
+    border: 1px solid rgb(211, 211, 211);
+    border-radius: 8px;
     background-color: white;
+}
+.companyName{
     padding: 20px;
 }
 
 .actions{
     width: 100%;
     height: 50px;
-    background-color: white;
     display:flex;
     justify-content: space-around;
     align-items: center;
@@ -27,7 +29,10 @@
 }
 
 /* Video Modal */
-
+.description{
+    padding: 15px 0px 15px 15px;
+    width: 0;
+}
 .placeBid{
     position: absolute;
     bottom: 15px;
@@ -46,6 +51,19 @@
 }
 .placeBid input:focus{
     outline: none;
+}
+
+.bidsContainer{
+    height: 65%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding:5px;
+}
+
+.bid{
+    margin-bottom: 15px;
+    font-size: 15px;
+    
 }
 
 .placeBid button{

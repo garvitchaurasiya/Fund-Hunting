@@ -18,6 +18,9 @@ const VideoSchema = new Schema({
         type: String,
         required: true
     },
+    likes: {
+        type: Array
+    },
     bids: {
         type: Array
     }
