@@ -1,33 +1,55 @@
-import React, { useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { Card, Header, Modal, Icon } from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
 import modalstyles from '../styles/VideoModal.module.css'
 import styles from '../styles/Card.module.css';
 import Link from 'next/link'
+import VisibilitySensor from 'react-visibility-sensor';
 
 function Card2(props) {
 
   const [state, setState] = useState({ amount: "", equity: "" })
   const [displayLikes, setDisplayLikes] = useState(props.likes);
   const [liked, setLiked] = useState("thumbs up outline");
+  const [bookmark, setBookmark] = useState('bookmark outline')
+  const [isMuted, setIsMuted] = useState(true);
 
+
+  const videoRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+  // useEffect(() => {
+  // }, [])
   useEffect(() => {
-    isAlreadyLiked();
-  }, [])
-  
-  const isAlreadyLiked = async()=>{
-    const response = await fetch("http://localhost:5000/api/video/alreadyliked", {
-        method: "POST",
-        headers: {
-          'Content-type': 'application/json',
-          'auth-token': localStorage.getItem('token')
-        },
-        body: JSON.stringify({ filename: props.filename })
-      });
-      const json = await response.json();
-      if(json.isLiked !== null){
-        setLiked("thumbs up");
+    // isAlreadyLiked();
+
+    if (typeof window !== 'undefined') {
+      console.log(isVisible);
+
+      if (isVisible) {
+        setIsMuted(false);
+        videoRef.current.play();
+      } else {
+        if (videoRef.current.play) {
+          videoRef.current.pause();
+        }
       }
+    }
+
+  }, [isVisible]);
+
+  const isAlreadyLiked = async () => {
+    const response = await fetch("http://localhost:5000/api/video/alreadyliked", {
+      method: "POST",
+      headers: {
+        'Content-type': 'application/json',
+        'auth-token': localStorage.getItem('token')
+      },
+      body: JSON.stringify({ filename: props.filename })
+    });
+    const json = await response.json();
+    if (json.isLiked !== null) {
+      setLiked("thumbs up");
+    }
   }
 
   const onChange = (e) => {
@@ -49,7 +71,7 @@ function Card2(props) {
       const json = await response.json();
       setDisplayLikes(json.likes.length);
     }
-    else{
+    else {
       const response = await fetch("http://localhost:5000/api/video/dislike", {
         method: "POST",
         headers: {
@@ -60,6 +82,37 @@ function Card2(props) {
       });
       const json = await response.json();
       setDisplayLikes(json.likes.length);
+    }
+
+
+  }
+
+  const toggleBookmark = async () => {
+    setBookmark((bookmark === 'bookmark outline') ? 'bookmark' : 'bookmark outline')
+
+    if (bookmark === 'bookmark outline') { // For bookmark
+      const response = await fetch("http://localhost:5000/api/video/save", {
+        method: "POST",
+        headers: {
+          'Content-type': 'application/json',
+          'auth-token': localStorage.getItem('token')
+        },
+        body: JSON.stringify({ filename: props.filename })
+      });
+      const json = await response.json();
+      // setDisplayLikes(json.likes.length);
+    }
+    else {
+      // const response = await fetch("http://localhost:5000/api/video/save", {
+      //   method: "POST",
+      //   headers: {
+      //     'Content-type': 'application/json',
+      //     'auth-token': localStorage.getItem('token')
+      //   },
+      //   body: JSON.stringify({ filename: props.filename })
+      // });
+      // const json = await response.json();
+      // setDisplayLikes(json.likes.length);
     }
 
 
@@ -128,22 +181,29 @@ function Card2(props) {
     return <Card.Group items={items} />;
   }
 
+
+
   return (
     <div className={styles.container}>
       <div className={styles.videos}>
         <div className={styles.companyName}>
-          <Icon size="big" name="user circle" />
+          <Icon size="big" name="user circle outline" />
           <b>{props.author}</b>
         </div>
-        <video className={styles.video} src={`/uploads/${props.filename}`} width="100%" height="590px" controls />
+          {/* <video ref={videoRef} className={styles.video} src={`/uploads/${props.filename}`} width="100%" height="590px" controls /> */}
+          <video muted={isMuted} onClick={()=>{setIsMuted(false)}} ref={videoRef} className={styles.video} src={`/uploads/${props.filename}`} width="100%" height="590px" controls >
+            <source src={`/uploads/${props.filename}`} type='video/mp4' />
+          </video>
         <div className={styles.actions}>
-          <div onClick={toggleLike}>{displayLikes}<Icon name={`${liked}`} /></div>
-          <div>Comment</div>
-          <div>Share</div>
+        <VisibilitySensor onChange={(isVisible) => setIsVisible(isVisible)}>
+          <div onClick={toggleLike}>{displayLikes}<Icon size="large" name={`${liked}`} /> Like</div>
+        </VisibilitySensor>
+          <div><Icon size="large" name='comment outline' /> Comment</div>
+          <div onClick={toggleBookmark}><Icon size="large" name={bookmark} /> Save</div>
 
           <Modal
             className={modalstyles.container}
-            trigger={<div onClick={getAllBids}>Ask</div>}
+            trigger={<div onClick={getAllBids}><Icon size="large" name='rupee' /> Bid</div>}
           >
             <Modal.Content className={modalstyles.content} image style={{ "padding": "0", 'height': '100%' }}>
               <video className={modalstyles.video} src={`/uploads/${props.filename}`} controls max-width="400px"></video>

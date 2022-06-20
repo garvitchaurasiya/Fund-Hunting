@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import styles from '../styles/Navbar.module.css'
 import Link from 'next/link'
 import Router from 'next/router'
-import { Icon } from "semantic-ui-react";
+import { Icon, Input } from "semantic-ui-react";
 
 export default function Navbar() {
 
@@ -26,7 +26,7 @@ export default function Navbar() {
         Fund Hunting
       </div>
       <div className={styles.search}>
-        <input placeholder='Search' />
+        <Input icon="search" placeholder='Search' />
       </div>
       <div>
         <ul className={styles.list}>
@@ -47,7 +47,7 @@ export default function Navbar() {
           </li>
 
           <li onClick={handleLogout} >
-            <Link className="nav_link" href="/login">
+            <Link href="/login">
               <Icon size="large" name="user circle" />
             </Link>
           </li>

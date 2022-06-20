@@ -18,6 +18,9 @@ const UserSchema = new Schema({
     post:{
         type: Array
     },
+    saved: {
+        type: Array
+    },
     date:{
         type:Date,
         default:Date.now

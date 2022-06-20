@@ -155,4 +155,50 @@ router.post('/getbids',fetchuser, async(req, res)=>{
 
 })
 
+router.post('/save', fetchuser, async(req, res)=>{
+    try {
+
+        const video = await Video.findOne({filename: req.body.filename});
+
+        await User.findOneAndUpdate({name: req.user.name},
+            {$push: {
+                "saved": video
+            }});
+
+        res.json({video:"saved"});
+        
+    } catch (error) {
+        console.error(error.message);
+        return res.status(400).json({success: false, error: "Internal Server Error"});
+    }
+})
+router.post('/unsave', fetchuser, async (req, res)=>{
+    
+    try {
+        const video = await Video.findOne({filename: req.body.filename});
+        await User.findOneAndUpdate({name: req.user.name}, 
+            {$pull: {
+                "saved": {filename: video.filename}
+            }});
+        res.json({success: true})
+
+    } catch (error) {
+        console.error(error.message);
+        return res.status(400).json({success: false, error: "Internal Server Error"});
+    }
+
+})
+
+router.get('/saved', fetchuser, async(req, res)=>{
+    try {
+
+        const user = await User.findOne({name: req.user.name})
+        res.json({saved: user.saved});
+        
+    } catch (error) {
+        console.error(error.message);
+        return res.status(400).json({success: false, error: "Internal Server Error"});
+    }
+})
+
 module.exports = router;

@@ -23,8 +23,11 @@ const VideoSchema = new Schema({
     },
     bids: {
         type: Array
+    },
+    date:{
+        type:Date,
+        default:Date.now
     }
-    
 })
 
 const Video = mongoose.model('video', VideoSchema);
