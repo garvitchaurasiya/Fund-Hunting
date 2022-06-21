@@ -33,17 +33,17 @@ router.post('/upload', upload.single('file') ,async (req, res)=>{
     //     return res.json({success: true, filePath: res.req.file.path, fileName: req.req.file.filename})
     // })
 
-    await User.updateOne({name: req.body.user}, { $push: { "post": req.file.filename } } );
+    await User.updateOne({name: req.body.user}, { $push: { "posts": req.file.filename } } );
 
     await Video.create({
         filename: req.file.filename,
-        author: req.body.user,
+        author: req.body.username,
         amount: req.body.amount,
         equity: req.body.equity
     })
 
     console.log(req.file);
-    res.json({success:true});
+    res.json({success:true, file: req.file});
 })
 
 router.post('/like', fetchuser, async (req, res)=>{
@@ -52,7 +52,7 @@ router.post('/like', fetchuser, async (req, res)=>{
         const {filename} = req.body;
         await Video.findOneAndUpdate({filename: filename}, 
             {$push: {
-                "likes": {user: req.user.name}
+                "likes": {username: req.user.username}
             }});
         const video = await Video.findOne({filename});
         res.json({likes: video.likes});
@@ -69,7 +69,7 @@ router.post('/dislike', fetchuser, async (req, res)=>{
         const {filename} = req.body;
         await Video.findOneAndUpdate({filename: filename}, 
             {$pull: {
-                "likes": {user: req.user.name}
+                "likes": {username: req.user.username}
             }});
         const video = await Video.findOne({filename});
         res.json({likes: video.likes});
@@ -86,7 +86,7 @@ router.post('/alreadyliked', fetchuser, async (req, res)=>{
     
     try {
         const {filename} = req.body;
-        const isLiked = await Video.findOne({filename: filename, likes: {user:req.user.name} })
+        const isLiked = await Video.findOne({filename: filename, likes: {username:req.user.username} })
         res.json({isLiked});
 
     } catch (error) {

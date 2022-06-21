@@ -7,18 +7,18 @@ export default function signup() {
 
     // let navigate = useNavigate();
 
-    const [credentials, setCredentials] = useState({ name: "", email: "", password: "" });
+    const [credentials, setCredentials] = useState({ username: "", email: "", password: "" });
     // let navigate1 = useNavigate();
     const handleSignup = async (e) => {
         e.preventDefault();
-        const { name, email, password } = credentials;
+        const { username, email, password } = credentials;
         const response = await fetch("http://localhost:5000/api/auth/createaccount", {
             method: "POST",
             headers: {
                 'Content-type': 'application/json'
             },
 
-            body: JSON.stringify({ name, email, password })
+            body: JSON.stringify({ username, email, password })
 
         });
         console.log(email, password);
@@ -58,7 +58,7 @@ export default function signup() {
                                 Sign Up
                             </h1>
                             <form onSubmit={handleSignup}>
-                                <input type="text" name="name" className={styles.login2_input} onChange={onChange} placeholder='Name' />
+                                <input type="text" name="username" className={styles.login2_input} onChange={onChange} placeholder='Username' />
                                 <input type="email" name="email" className={styles.login2_input} onChange={onChange} placeholder='Email' />
                                 <input type="password" name="password" className={styles.login2_input} onChange={onChange} placeholder='Password' />
 

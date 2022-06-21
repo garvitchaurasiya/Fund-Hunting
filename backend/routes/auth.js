@@ -25,19 +25,19 @@ router.post('/createaccount', async (req, res)=>{
         const securedPassword = await bcrypt.hash(req.body.password, salt);
 
         user = await User.create({
-            name: req.body.name,
+            username: req.body.username,
             email: req.body.email,
             password: securedPassword
         })
         const data = {
             user:{
-                name: user.name,
+                username: user.username,
                 email: user.email
             }
         }
         const authToken = jwt.sign(data, JWT_SECRET);
 
-        res.json({success, authToken: authToken, user: user.name});
+        res.json({success, authToken: authToken, username: user.username});
 
     } catch (error) {
         console.error(error.message);
@@ -64,15 +64,15 @@ router.post('/login', async (req, res)=>{
         
         const data = {
             user: {
-                name:user.name,
+                username:user.username,
                 email: user.email
             },
         }
 
         authToken = jwt.sign(data, JWT_SECRET);
         success = true;
-        console.log(user.name);
-        res.json({success, authToken, user: user.name});
+        console.log(user.username);
+        res.json({success, authToken, username: user.username});
         
     } catch (error) {
         console.error(error.message);

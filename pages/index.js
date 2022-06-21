@@ -16,7 +16,7 @@ export default function Home() {
 
           <div className={styles.userinfo}>
             <Icon size="huge" name="user circle" />
-            <h4 suppressHydrationWarning> {(typeof window !== 'undefined')?localStorage.getItem('user'):"asdf"}</h4>
+            <h4 suppressHydrationWarning> {(typeof window !== 'undefined')?localStorage.getItem('username'):"asdf"}</h4>
           </div>
 
           <div className={styles.optionsContainer}>

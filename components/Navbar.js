@@ -22,8 +22,12 @@ export default function Navbar() {
 
   return (
     <div className={styles.container}>
+            <Link href="/">
+              {/* <Icon size="large" name="bookmark" /> */}
+              HIII
+            </Link>
       <div className={styles.fundhunting}>
-        Fund Hunting
+        Fund Hunasdfting
       </div>
       <div className={styles.search}>
         <Input icon="search" placeholder='Search' />

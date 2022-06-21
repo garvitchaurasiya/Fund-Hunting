@@ -5,10 +5,12 @@ import modalstyles from '../styles/VideoModal.module.css'
 import styles from '../styles/Card.module.css';
 import Link from 'next/link'
 import VisibilitySensor from 'react-visibility-sensor';
+import web3 from '../ethereum/web3';
+import fundhunting from '../ethereum/fundhunting';
 
 function Card2(props) {
 
-  const [state, setState] = useState({ amount: "", equity: "" })
+  const [state, setState] = useState({ amount: 0, equity: "" })
   const [displayLikes, setDisplayLikes] = useState(props.likes);
   const [liked, setLiked] = useState("thumbs up outline");
   const [bookmark, setBookmark] = useState('bookmark outline')
@@ -20,11 +22,9 @@ function Card2(props) {
   // useEffect(() => {
   // }, [])
   useEffect(() => {
-    // isAlreadyLiked();
+    isAlreadyLiked();
 
     if (typeof window !== 'undefined') {
-      console.log(isVisible);
-
       if (isVisible) {
         setIsMuted(false);
         videoRef.current.play();
@@ -122,18 +122,24 @@ function Card2(props) {
 
   const getAllBids = async (e) => {
     e.preventDefault();
-    const response = await fetch("http://localhost:5000/api/video/getbids", {
-      method: "POST",
-      headers: {
-        'Content-type': 'application/json',
-        'auth-token': localStorage.getItem('token')
-      },
-      body: JSON.stringify({ filename: props.filename })
+    console.log(localStorage.getItem('username'));
 
-    });
-    const json = await response.json();
-    setBids(json.bids);
-    console.log(state, json);
+    const res = await fundhunting.methods.getPlacedBids(props.filename).call();
+
+    setBids(res);
+
+    // const response = await fetch("http://localhost:5000/api/video/getbids", {
+    //   method: "POST",
+    //   headers: {
+    //     'Content-type': 'application/json',
+    //     'auth-token': localStorage.getItem('token')
+    //   },
+    //   body: JSON.stringify({ filename: props.filename })
+
+    // });
+    // const json = await response.json();
+    // setBids(json.bids);
+    // console.log(state, json);
     // if (json.success) {
     //   // Save the auth Token and redirect
     //   localStorage.setItem('token', json.authToken);
@@ -148,17 +154,30 @@ function Card2(props) {
 
   const placeNewBid = async (e) => {
     e.preventDefault();
-    const response = await fetch("http://localhost:5000/api/video/placebid", {
-      method: "POST",
-      headers: {
-        'Content-type': 'application/json',
-        'auth-token': localStorage.getItem('token')
-      },
-      body: JSON.stringify({ filename: props.filename, bidamount: state.amount, bidequity: state.equity })
 
-    });
-    const json = await response.json();
-    setBids(json.bids);
+    const accounts = await web3.eth.getAccounts();
+    const success = await fundhunting.methods.placeBid(
+      props.filename,
+      state.amount,
+      state.equity,
+      localStorage.getItem('username')
+    ).send({
+      from: accounts[0],
+      value: web3.utils.toWei('0.01', 'ether')
+    })
+    // setBids(json.bids);
+
+    // const response = await fetch("http://localhost:5000/api/video/placebid", {
+    //   method: "POST",
+    //   headers: {
+    //     'Content-type': 'application/json',
+    //     'auth-token': localStorage.getItem('token')
+    //   },
+    //   body: JSON.stringify({ filename: props.filename, bidamount: state.amount, bidequity: state.equity })
+
+    // });
+    // const json = await response.json();
+    // setBids(json.bids);
     var myDiv = document.getElementById("bidsContainer");
     myDiv.scrollTop = myDiv.scrollHeight + 1000;
   }
@@ -171,7 +190,7 @@ function Card2(props) {
         meta: ele.equity,
         description: (
           <Link href='/'>
-            <a>{ele.bidplacer}</a>
+            <a>{ele.bidPlacer}</a>
           </Link>
         ),
         fluid: true,
@@ -216,7 +235,7 @@ function Card2(props) {
                 </div>
                 <Modal.Actions>
                   <form className={styles.placeBid} onSubmit={placeNewBid}>
-                    <input onChange={onChange} name="amount" value={state.amount} placeholder='amount' />
+                    <input type="number" onChange={onChange} name="amount" value={state.amount} placeholder='amount' />
                     <input onChange={onChange} name="equity" value={state.equity} placeholder='equity' />
                     <button type="submit">Place Bid</button>
                   </form>

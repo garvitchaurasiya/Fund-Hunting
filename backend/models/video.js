@@ -21,9 +21,6 @@ const VideoSchema = new Schema({
     likes: {
         type: Array
     },
-    bids: {
-        type: Array
-    },
     date:{
         type:Date,
         default:Date.now

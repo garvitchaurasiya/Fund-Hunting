@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const {Schema} = mongoose;
 const UserSchema = new Schema({
     
-    name: {
+    username: {
         type: String,
         required: true
     },
@@ -15,10 +15,10 @@ const UserSchema = new Schema({
         type:String,
         required:true
     },
-    post:{
+    saved: {
         type: Array
     },
-    saved: {
+    posts: {
         type: Array
     },
     date:{
