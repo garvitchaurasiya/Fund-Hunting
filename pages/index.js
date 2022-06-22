@@ -1,12 +1,17 @@
-import React, {useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import { Icon } from 'semantic-ui-react'
 import Navbar from '../components/Navbar'
 import Videos from '../components/Videos'
 import styles from '../styles/Home.module.css'
 import Link from 'next/link'
-import Router from 'next/router'
 
-export default function Home() { 
+export default function Home() {
+ let a;
+ const [userName, setUserName] = useState("")
+  useEffect(() => {
+    setUserName(localStorage.getItem("username"));
+  }, [])
+
 
   return (
     <div style={{ "backgroundColor": "#f3f2ef" }}>
@@ -16,7 +21,10 @@ export default function Home() {
 
           <div className={styles.userinfo}>
             <Icon size="huge" name="user circle" />
-            <h4 suppressHydrationWarning> {(typeof window !== 'undefined')?localStorage.getItem('username'):"asdf"}</h4>
+            <h4>
+              {/* {(typeof window !== 'undefined')?localStorage.getItem('username'):""} */}
+              {userName}
+            </h4>
           </div>
 
           <div className={styles.optionsContainer}>

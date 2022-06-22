@@ -155,12 +155,33 @@ router.post('/getbids',fetchuser, async(req, res)=>{
 
 })
 
+router.post('/alreadysaved', fetchuser, async (req, res)=>{
+    
+    try {
+        // const isLiked = await Video.findOne({filename: filename, likes: {username:req.user.username} })
+
+        const isSaved = await User.findOne({username: req.user.username})
+        for (var i=0; i<isSaved.saved.length; i++){
+            console.log(i, isSaved.saved[i].filename);
+            if(isSaved.saved[i].filename === req.body.filename){
+                return res.json({saved: true})
+            }
+        }
+        res.json({saved: false});
+
+    } catch (error) {
+        console.error(error.message);
+        return res.status(400).json({success: false, error: "Internal Server Error"});
+    }
+
+})
+
 router.post('/save', fetchuser, async(req, res)=>{
     try {
 
         const video = await Video.findOne({filename: req.body.filename});
 
-        await User.findOneAndUpdate({name: req.user.name},
+        await User.findOneAndUpdate({username: req.user.username},
             {$push: {
                 "saved": video
             }});
@@ -176,7 +197,7 @@ router.post('/unsave', fetchuser, async (req, res)=>{
     
     try {
         const video = await Video.findOne({filename: req.body.filename});
-        await User.findOneAndUpdate({name: req.user.name}, 
+        await User.findOneAndUpdate({username: req.user.username}, 
             {$pull: {
                 "saved": {filename: video.filename}
             }});
@@ -192,7 +213,7 @@ router.post('/unsave', fetchuser, async (req, res)=>{
 router.get('/saved', fetchuser, async(req, res)=>{
     try {
 
-        const user = await User.findOne({name: req.user.name})
+        const user = await User.findOne({username: req.user.username})
         res.json({saved: user.saved});
         
     } catch (error) {

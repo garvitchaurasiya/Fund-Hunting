@@ -10,7 +10,7 @@ import fundhunting from '../ethereum/fundhunting';
 
 function Card2(props) {
 
-  const [state, setState] = useState({ amount: 0, equity: "" })
+  const [state, setState] = useState({ amount: "", equity: "" })
   const [displayLikes, setDisplayLikes] = useState(props.likes);
   const [liked, setLiked] = useState("thumbs up outline");
   const [bookmark, setBookmark] = useState('bookmark outline')
@@ -22,7 +22,8 @@ function Card2(props) {
   // useEffect(() => {
   // }, [])
   useEffect(() => {
-    isAlreadyLiked();
+    
+    isAlreadyLikedOrSaved();
 
     if (typeof window !== 'undefined') {
       if (isVisible) {
@@ -37,7 +38,7 @@ function Card2(props) {
 
   }, [isVisible]);
 
-  const isAlreadyLiked = async () => {
+  const isAlreadyLikedOrSaved = async () => {
     const response = await fetch("http://localhost:5000/api/video/alreadyliked", {
       method: "POST",
       headers: {
@@ -47,8 +48,22 @@ function Card2(props) {
       body: JSON.stringify({ filename: props.filename })
     });
     const json = await response.json();
+    
     if (json.isLiked !== null) {
       setLiked("thumbs up");
+    }
+
+    const response2 = await fetch("http://localhost:5000/api/video/alreadysaved", {
+      method: "POST",
+      headers: {
+        'Content-type': 'application/json',
+        'auth-token': localStorage.getItem('token')
+      },
+      body: JSON.stringify({filename: props.filename})
+    })
+    const json2 = await response2.json();
+    if (json2.saved) {
+      setBookmark("bookmark");
     }
   }
 
@@ -103,14 +118,14 @@ function Card2(props) {
       // setDisplayLikes(json.likes.length);
     }
     else {
-      // const response = await fetch("http://localhost:5000/api/video/save", {
-      //   method: "POST",
-      //   headers: {
-      //     'Content-type': 'application/json',
-      //     'auth-token': localStorage.getItem('token')
-      //   },
-      //   body: JSON.stringify({ filename: props.filename })
-      // });
+      const response = await fetch("http://localhost:5000/api/video/unsave", {
+        method: "POST",
+        headers: {
+          'Content-type': 'application/json',
+          'auth-token': localStorage.getItem('token')
+        },
+        body: JSON.stringify({ filename: props.filename })
+      });
       // const json = await response.json();
       // setDisplayLikes(json.likes.length);
     }

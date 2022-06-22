@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import styles from '../styles/Navbar.module.css'
 import Link from 'next/link'
 import Router from 'next/router'
@@ -8,7 +8,7 @@ export default function Navbar() {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    localStorage.removeItem('username');
   }
 
   useEffect(() => {
@@ -22,12 +22,8 @@ export default function Navbar() {
 
   return (
     <div className={styles.container}>
-            <Link href="/">
-              {/* <Icon size="large" name="bookmark" /> */}
-              HIII
-            </Link>
       <div className={styles.fundhunting}>
-        Fund Hunasdfting
+        Fund Hunting
       </div>
       <div className={styles.search}>
         <Input icon="search" placeholder='Search' />
