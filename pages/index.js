@@ -6,8 +6,8 @@ import styles from '../styles/Home.module.css'
 import Link from 'next/link'
 
 export default function Home() {
- let a;
- const [userName, setUserName] = useState("")
+  let a;
+  const [userName, setUserName] = useState("")
   useEffect(() => {
     setUserName(localStorage.getItem("username"));
   }, [])
@@ -24,6 +24,7 @@ export default function Home() {
             <h4>
               {/* {(typeof window !== 'undefined')?localStorage.getItem('username'):""} */}
               {userName}
+
             </h4>
           </div>
 

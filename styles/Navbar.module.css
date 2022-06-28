@@ -39,3 +39,6 @@
 .list li{
     cursor: pointer;
 }
+i .icon{
+    font-size: 50px;
+}

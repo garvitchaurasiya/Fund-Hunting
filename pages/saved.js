@@ -16,7 +16,7 @@ export default function Home() {
 
         });
         const json = await response.json();
-        console.log(json.saved);
+
         setAllVideos(json.saved);
 
     }

@@ -2,13 +2,14 @@ import React, { useEffect } from 'react'
 import styles from '../styles/Navbar.module.css'
 import Link from 'next/link'
 import Router from 'next/router'
-import { Icon, Input } from "semantic-ui-react";
+import { Icon, Input, Dropdown } from "semantic-ui-react";
 
 export default function Navbar() {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
+    Router.push({pathname: "/login"})
   }
 
   useEffect(() => {
@@ -41,15 +42,22 @@ export default function Navbar() {
             </Link>
           </li>
           <li>
-            <Link href="/">
+            <Link href="/saved">
               <Icon size="large" name="bookmark" />
             </Link>
           </li>
 
-          <li onClick={handleLogout} >
-            <Link href="/login">
-              <Icon size="large" name="user circle" />
-            </Link>
+          <li>
+            <Dropdown className={styles.dropdown} icon="user circle">
+              <Dropdown.Menu>
+                <Dropdown.Item text='Your Profile' />
+                <Dropdown.Item text='Your Posts'/>
+                <Dropdown.Item text='Bid Placed'/>
+                <Dropdown.Item text='Saved' />
+                <Dropdown.Divider />
+                <Dropdown.Item onClick={handleLogout} text='Logout' />
+              </Dropdown.Menu>
+            </Dropdown>
           </li>
         </ul>
       </div>

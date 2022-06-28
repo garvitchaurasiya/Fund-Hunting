@@ -21,6 +21,9 @@ const VideoSchema = new Schema({
     likes: {
         type: Array
     },
+    comments: {
+        type: Array
+    },
     date:{
         type:Date,
         default:Date.now

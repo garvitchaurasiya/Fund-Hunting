@@ -59,9 +59,8 @@
     box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 }
 
-@media screen and (max-width: 900px){
+/* @media screen and (max-width: 900px){
     .form{
-        /* display: block; */
         width:100%;
         margin-top: 40px;
     }
@@ -70,4 +69,4 @@
         width:95%;
         margin-left:3%;
     }
-}
+} */

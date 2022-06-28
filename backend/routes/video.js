@@ -162,7 +162,7 @@ router.post('/alreadysaved', fetchuser, async (req, res)=>{
 
         const isSaved = await User.findOne({username: req.user.username})
         for (var i=0; i<isSaved.saved.length; i++){
-            console.log(i, isSaved.saved[i].filename);
+            // console.log(i, isSaved.saved[i].filename);
             if(isSaved.saved[i].filename === req.body.filename){
                 return res.json({saved: true})
             }
@@ -221,5 +221,33 @@ router.get('/saved', fetchuser, async(req, res)=>{
         return res.status(400).json({success: false, error: "Internal Server Error"});
     }
 })
+
+router.post('/comment', fetchuser, async(req, res)=>{
+    try {
+        
+        await Video.findOneAndUpdate({filename: req.body.filename},
+            {$push: {
+                "comments": {username: req.user.username, comment: req.body.comment}
+            }});
+
+        res.json({success: true});
+        
+    } catch (error) {
+        console.error(error.message);
+        return res.status(400).json({success: false, error: "Internal Server Error"});
+    }
+})
+
+router.post('/getcomments', fetchuser, async(req, res)=>{
+    try {
+        const video = await Video.findOne({filename: req.body.filename})
+        res.json({comments: video.comments});
+        
+    } catch (error) {
+        console.error(error.message);
+        return res.status(400).json({success: false, error: "Internal Server Error"});
+    }
+})
+
 
 module.exports = router;

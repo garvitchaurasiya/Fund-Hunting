@@ -10,19 +10,21 @@ import fundhunting from '../ethereum/fundhunting';
 
 function Card2(props) {
 
-  const [state, setState] = useState({ amount: "", equity: "" })
+  const [state, setState] = useState({ amount: "", equity: "", comment: "" })
   const [displayLikes, setDisplayLikes] = useState(props.likes);
   const [liked, setLiked] = useState("thumbs up outline");
   const [bookmark, setBookmark] = useState('bookmark outline')
   const [isMuted, setIsMuted] = useState(true);
+  const [bids, setBids] = useState([]);
+  const [comments, setComments] = useState([]);
+
 
 
   const videoRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
-  // useEffect(() => {
-  // }, [])
+
   useEffect(() => {
-    
+
     isAlreadyLikedOrSaved();
 
     if (typeof window !== 'undefined') {
@@ -48,7 +50,7 @@ function Card2(props) {
       body: JSON.stringify({ filename: props.filename })
     });
     const json = await response.json();
-    
+
     if (json.isLiked !== null) {
       setLiked("thumbs up");
     }
@@ -59,7 +61,7 @@ function Card2(props) {
         'Content-type': 'application/json',
         'auth-token': localStorage.getItem('token')
       },
-      body: JSON.stringify({filename: props.filename})
+      body: JSON.stringify({ filename: props.filename })
     })
     const json2 = await response2.json();
     if (json2.saved) {
@@ -69,6 +71,7 @@ function Card2(props) {
 
   const onChange = (e) => {
     setState({ ...state, [e.target.name]: e.target.value })
+    console.log(state);
   }
 
   const toggleLike = async () => {
@@ -133,7 +136,6 @@ function Card2(props) {
 
   }
 
-  const [bids, setBids] = useState([]);
 
   const getAllBids = async (e) => {
     e.preventDefault();
@@ -143,28 +145,73 @@ function Card2(props) {
 
     setBids(res);
 
-    // const response = await fetch("http://localhost:5000/api/video/getbids", {
-    //   method: "POST",
-    //   headers: {
-    //     'Content-type': 'application/json',
-    //     'auth-token': localStorage.getItem('token')
-    //   },
-    //   body: JSON.stringify({ filename: props.filename })
+  }
 
-    // });
-    // const json = await response.json();
-    // setBids(json.bids);
-    // console.log(state, json);
-    // if (json.success) {
-    //   // Save the auth Token and redirect
-    //   localStorage.setItem('token', json.authToken);
-    //   localStorage.setItem('user', json.user);
-    //   // navigate('/');
-    //   Router.push({ pathname: '/' })
-    // }
-    // else {
-    //   alert('Please enter the valid credentials');
-    // }
+  const addNewComment = async (e) => {
+    e.preventDefault();
+    console.log(state.comment);
+
+    await fetch("http://localhost:5000/api/video/comment", {
+      method: "POST",
+      headers: {
+        'Content-type': 'application/json',
+        'auth-token': localStorage.getItem('token')
+      },
+      body: JSON.stringify({ filename: props.filename, comment: state.comment })
+    });
+
+    const response = await fetch("http://localhost:5000/api/video/getcomments", {
+      method: "POST",
+      headers: {
+        'Content-type': 'application/json',
+        'auth-token': localStorage.getItem('token')
+      },
+      body: JSON.stringify({ filename: props.filename })
+    });
+    const json = await response.json();
+
+    setComments(json.comments);
+
+    setTimeout(() => {
+      var myDiv = document.getElementById("commentsContainer");
+      var myDiv2 = document.getElementById("renderComments");
+      myDiv2.scrollTop = myDiv.scrollHeight;
+    }, 100);
+
+  }
+
+  async function getAllComments(e) {
+    // e.preventDefault();
+    const response = await fetch("http://localhost:5000/api/video/getcomments", {
+      method: "POST",
+      headers: {
+        'Content-type': 'application/json',
+        'auth-token': localStorage.getItem('token')
+      },
+      body: JSON.stringify({ filename: props.filename })
+    });
+    const json = await response.json();
+
+    setComments(json.comments);
+
+
+
+  }
+
+  const renderComments = () => {
+    // getAllComments();
+    const items = comments.map((ele, index) => {
+      return {
+        key: index,
+        header: ele.comment,
+        meta: ele.username,
+        fluid: true,
+      };
+    });
+
+
+
+    return <Card.Group items={items} id="commentsContainer" />;
   }
 
   const placeNewBid = async (e) => {
@@ -178,23 +225,18 @@ function Card2(props) {
       localStorage.getItem('username')
     ).send({
       from: accounts[0],
-      value: web3.utils.toWei('0.01', 'ether')
+      value: web3.utils.toWei('0.001', 'ether')
     })
-    // setBids(json.bids);
 
-    // const response = await fetch("http://localhost:5000/api/video/placebid", {
-    //   method: "POST",
-    //   headers: {
-    //     'Content-type': 'application/json',
-    //     'auth-token': localStorage.getItem('token')
-    //   },
-    //   body: JSON.stringify({ filename: props.filename, bidamount: state.amount, bidequity: state.equity })
+    const res = await fundhunting.methods.getPlacedBids(props.filename).call();
+    setBids(res);
+    console.log("Placed")
 
-    // });
-    // const json = await response.json();
-    // setBids(json.bids);
-    var myDiv = document.getElementById("bidsContainer");
-    myDiv.scrollTop = myDiv.scrollHeight + 1000;
+    setTimeout(() => {
+      var myDiv = document.getElementById("bidsContainer");
+      var myDiv2 = document.getElementById("renderCards");
+      myDiv2.scrollTop = myDiv.scrollHeight;
+    }, 100);
   }
 
   const renderCards = () => {
@@ -212,7 +254,7 @@ function Card2(props) {
       };
     });
 
-    return <Card.Group items={items} />;
+    return <Card.Group items={items} id="bidsContainer" />;
   }
 
 
@@ -224,15 +266,39 @@ function Card2(props) {
           <Icon size="big" name="user circle outline" />
           <b>{props.author}</b>
         </div>
-          {/* <video ref={videoRef} className={styles.video} src={`/uploads/${props.filename}`} width="100%" height="590px" controls /> */}
-          <video muted={isMuted} onClick={()=>{setIsMuted(false)}} ref={videoRef} className={styles.video} src={`/uploads/${props.filename}`} width="100%" height="590px" controls >
-            <source src={`/uploads/${props.filename}`} type='video/mp4' />
-          </video>
+        <video muted={isMuted} onClick={() => { setIsMuted(false) }} ref={videoRef} className={styles.video} src={`/uploads/${props.filename}`} width="100%" height="590px" controls >
+          <source src={`/uploads/${props.filename}`} type='video/mp4' />
+        </video>
         <div className={styles.actions}>
-        <VisibilitySensor onChange={(isVisible) => setIsVisible(isVisible)}>
-          <div onClick={toggleLike}>{displayLikes}<Icon size="large" name={`${liked}`} /> Like</div>
-        </VisibilitySensor>
-          <div><Icon size="large" name='comment outline' /> Comment</div>
+          <VisibilitySensor onChange={(isVisible) => setIsVisible(isVisible)}>
+            <div onClick={toggleLike}>{displayLikes}<Icon size="large" name={`${liked}`} /> Like</div>
+          </VisibilitySensor>
+          <div>
+
+            <Modal
+              className={modalstyles.container}
+              trigger={<div onClick={getAllComments}><Icon size="large" name='comment outline' /> Comment</div>}
+            // trigger={<div><Icon size="large" name='comment outline' /> Comment</div>}
+            >
+              <Modal.Content className={modalstyles.content} image style={{ "padding": "0", 'height': '100%' }}>
+                <video className={modalstyles.video} src={`/uploads/${props.filename}`} controls max-width="400px"></video>
+                <Modal.Description className={styles.description}>
+                  <Header>Comment</Header>
+                  <div className={styles.bidsContainer} id="renderComments">
+                    {renderComments()}
+                  </div>
+                  <Modal.Actions>
+                    <form className={styles.placeBid} onSubmit={addNewComment}>
+                      {/* <input type="number" onChange={onChange} name="amount" value={state.amount} placeholder='amount' /> */}
+                      <input type="text" onChange={onChange} name="comment" value={state.comment} placeholder='Comment' />
+                      <button type="submit">Comment</button>
+                    </form>
+                  </Modal.Actions>
+                </Modal.Description>
+              </Modal.Content>
+            </Modal>
+          </div>
+
           <div onClick={toggleBookmark}><Icon size="large" name={bookmark} /> Save</div>
 
           <Modal
@@ -245,7 +311,7 @@ function Card2(props) {
                 <Header>Place a Bid</Header>
                 <p>{props.author} wish to raise <b>Rs. {props.amount}</b> for <b>{props.equity}</b> of equity.</p>
                 <h5>Bid Placed</h5>
-                <div className={styles.bidsContainer} id="bidsContainer">
+                <div className={styles.bidsContainer} style={{"height":"65%"}} id="renderCards">
                   {renderCards()}
                 </div>
                 <Modal.Actions>
@@ -257,8 +323,8 @@ function Card2(props) {
                 </Modal.Actions>
               </Modal.Description>
             </Modal.Content>
-
           </Modal>
+
         </div>
       </div>
 
