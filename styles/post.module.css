@@ -40,10 +40,7 @@
     background: #0c1027;
     transition-duration: 1s;
 }
-.button:hover{
-    background-color: red;
 
-}
 .container{
     display: flex;
     justify-content: center;
@@ -58,7 +55,12 @@
     border-radius: 5px;
     box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 }
-
+.uploadFileLogo:hover{
+    cursor: pointer;
+}
+.button:hover{
+    cursor:pointer;
+}
 /* @media screen and (max-width: 900px){
     .form{
         width:100%;

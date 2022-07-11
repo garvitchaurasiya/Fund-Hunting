@@ -5,6 +5,7 @@ import styles from '../../styles/post.module.css'
 import fundhunting from '../../ethereum/fundhunting';
 import web3 from '../../ethereum/web3';
 import { Icon } from 'semantic-ui-react';
+import 'semantic-ui-css/semantic.min.css'
 
 export default function Post() {
 
@@ -55,7 +56,6 @@ export default function Post() {
 
         return (
             <div>
-    
                 <Navbar />
     
                 <div className={styles.container}  >
@@ -63,19 +63,24 @@ export default function Post() {
                         <div className={styles.form}>
                             <div>
                                 <h1 className={styles.heading}>
-                                    Post
-                                    <Icon name="user circle" />
-                                    
+                                    Post A Video
+                                    {/* <Icon name="user circle" />                                     */}
                                 </h1>
                                 <form onSubmit={handleOnSubmit} encType="multipart/form-data">
-    
-                                    <input type="file" filename="file" onChange={onChangeFile} />
-    
-                                    <label>Ask</label>
-                                    <input type="text" name="amount" className={styles.input} onChange={onChange} value={state.amount} placeholder='1.25 Lakh' />
-                                    <label>For</label>
-                                    <input type="text" name="equity" className={styles.input} onChange={onChange} value={state.equity} placeholder='7%' />
-    
+                                    <label className={styles.uploadFileLogo} htmlFor="uploadFile"><Icon name="upload" size="huge" /></label>
+                                    <input id="uploadFile" hidden type="file" filename="file" onChange={onChangeFile} />
+                                    <i className="fa-solid fa-plus" style={{"fontSize":"20px"}}></i>
+                                    
+                                    <div>
+                                        <label htmlFor="ask">Ask</label>
+                                        <input id="ask" type="text" name="amount" className={styles.input} onChange={onChange} value={state.amount} placeholder='1.25 Lakh' />
+                                    </div>
+
+                                    <div>
+                                        <label htmlFor="for">For</label>
+                                        <input id="for" type="text" name="equity" className={styles.input} onChange={onChange} value={state.equity} placeholder='7%' />
+                                    </div>
+                                    
                                     <button type='submit' className={styles.button}>Upload</button>
     
     
