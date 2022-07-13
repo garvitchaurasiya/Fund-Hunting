@@ -3,9 +3,15 @@ import React, { useState, useEffect } from 'react'
 import Card2 from "./Card"
 import styles from "../styles/Home.module.css"
 
-export default function Videos() {
+export default function Videos(props) {
 
   const [allVideos, setAllVideos] = useState([]);
+
+  useEffect(() => {
+
+    (props.viewingProfile)?getUserVideos():getAllVideos();
+
+  }, []);
 
   const getAllVideos = async () => {
     const response = await fetch("http://localhost:5000/api/video/getvideos", {
@@ -20,11 +26,18 @@ export default function Videos() {
 
   }
 
-  useEffect(() => {
+  const getUserVideos = async() =>{
+    const response = await fetch("http://localhost:5000/api/video/getuservideos",{
+      method: "POST",
+      headers: {
+        'Content-type':'application/json'
+      },
+      body: JSON.stringify({ username: props.username })
+    });
+    const json = await response.json();
+    setAllVideos(json);
 
-    getAllVideos();
-
-  }, []);
+  }
 
   const getLikes = async (filename) => {
     const response = await fetch("http://localhost:5000/api/video/getlikes", {

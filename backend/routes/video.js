@@ -116,7 +116,13 @@ router.post('/getlikes', async (req, res)=>{
 router.get('/getvideos', async (req, res)=>{
     
     let videos = await Video.find();
+    res.json(videos);
+
+})
+
+router.post('/getuservideos', async (req, res)=>{
     
+    let videos = await Video.find({author: req.body.username});
     res.json(videos);
 
 })

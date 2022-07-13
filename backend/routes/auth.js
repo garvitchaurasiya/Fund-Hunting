@@ -27,6 +27,7 @@ router.post('/createaccount', async (req, res)=>{
         user = await User.create({
             username: req.body.username,
             email: req.body.email,
+            mobileNumber: req.body.mobileNumber,
             password: securedPassword
         })
         const data = {
@@ -80,12 +81,12 @@ router.post('/login', async (req, res)=>{
     }
 })
 
-router.post('/getuser', fetchuser, async(req, res)=>{
+router.post('/getuser',  async(req, res)=>{
 
     try {
-        const email = req.user.email;
+        // const email = req.user.email;
         // console.log(username);
-        const user = await User.findOne({email}).select("-password");
+        const user = await User.findOne({username: req.body.username}).select("-password");
 
         res.json({user});
 

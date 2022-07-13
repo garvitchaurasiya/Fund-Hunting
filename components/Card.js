@@ -18,8 +18,6 @@ function Card2(props) {
   const [bids, setBids] = useState([]);
   const [comments, setComments] = useState([]);
 
-
-
   const videoRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -135,7 +133,6 @@ function Card2(props) {
 
 
   }
-
 
   const getAllBids = async (e) => {
     e.preventDefault();
@@ -257,6 +254,31 @@ function Card2(props) {
     return <Card.Group items={items} id="bidsContainer" />;
   }
 
+  const showCommentsModal = () => {
+    return  <Modal
+      className={modalstyles.container}
+      trigger={<div onClick={getAllComments}><Icon size="large" name='comment outline' /> Comment</div>}
+    // trigger={<div><Icon size="large" name='comment outline' /> Comment</div>}
+    >
+      <Modal.Content className={modalstyles.content} image style={{ "padding": "0", 'height': '100%' }}>
+        <video className={modalstyles.video} src={`/uploads/${props.filename}`} controls max-width="400px"></video>
+        <Modal.Description className={styles.description}>
+          <Header>Comment</Header>
+          <div className={styles.bidsContainer} id="renderComments">
+            {renderComments()}
+          </div>
+          <Modal.Actions>
+            <form className={styles.placeBid} onSubmit={addNewComment}>
+              {/* <input type="number" onChange={onChange} name="amount" value={state.amount} placeholder='amount' /> */}
+              <input type="text" onChange={onChange} name="comment" value={state.comment} placeholder='Comment' />
+              <button type="submit">Comment</button>
+            </form>
+          </Modal.Actions>
+        </Modal.Description>
+      </Modal.Content>
+    </Modal>
+  }
+
 
 
   return (
@@ -266,7 +288,8 @@ function Card2(props) {
           <Icon size="big" name="user circle outline" />
           <b>{props.author}</b>
         </div>
-        <video muted={isMuted} onClick={() => { setIsMuted(false) }} ref={videoRef} className={styles.video} src={`/uploads/${props.filename}`} width="100%" height="590px" controls >
+        {/* <video muted={isMuted} onClick={() => { setIsMuted(false) }} ref={videoRef} className={styles.video} src={`/uploads/${props.filename}`} width="100%" height="590px" controls > */}
+        <video muted onClick={() => { setIsMuted(false) }} ref={videoRef} className={styles.video} src={`/uploads/${props.filename}`} width="100%" height="590px" controls >
           <source src={`/uploads/${props.filename}`} type='video/mp4' />
         </video>
         <div className={styles.actions}>
@@ -274,29 +297,7 @@ function Card2(props) {
             <div onClick={toggleLike}>{displayLikes}<Icon size="large" name={`${liked}`} /> Like</div>
           </VisibilitySensor>
           <div>
-
-            <Modal
-              className={modalstyles.container}
-              trigger={<div onClick={getAllComments}><Icon size="large" name='comment outline' /> Comment</div>}
-            // trigger={<div><Icon size="large" name='comment outline' /> Comment</div>}
-            >
-              <Modal.Content className={modalstyles.content} image style={{ "padding": "0", 'height': '100%' }}>
-                <video className={modalstyles.video} src={`/uploads/${props.filename}`} controls max-width="400px"></video>
-                <Modal.Description className={styles.description}>
-                  <Header>Comment</Header>
-                  <div className={styles.bidsContainer} id="renderComments">
-                    {renderComments()}
-                  </div>
-                  <Modal.Actions>
-                    <form className={styles.placeBid} onSubmit={addNewComment}>
-                      {/* <input type="number" onChange={onChange} name="amount" value={state.amount} placeholder='amount' /> */}
-                      <input type="text" onChange={onChange} name="comment" value={state.comment} placeholder='Comment' />
-                      <button type="submit">Comment</button>
-                    </form>
-                  </Modal.Actions>
-                </Modal.Description>
-              </Modal.Content>
-            </Modal>
+            {showCommentsModal()}
           </div>
 
           <div onClick={toggleBookmark}><Icon size="large" name={bookmark} /> Save</div>
@@ -311,7 +312,7 @@ function Card2(props) {
                 <Header>Place a Bid</Header>
                 <p>{props.author} wish to raise <b>Rs. {props.amount}</b> for <b>{props.equity}</b> of equity.</p>
                 <h5>Bid Placed</h5>
-                <div className={styles.bidsContainer} style={{"height":"65%"}} id="renderCards">
+                <div className={styles.bidsContainer} style={{ "height": "65%" }} id="renderCards">
                   {renderCards()}
                 </div>
                 <Modal.Actions>
