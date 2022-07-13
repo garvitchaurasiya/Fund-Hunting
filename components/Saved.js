@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import Card2 from '../components/Card';
-import Navbar from '../components/Navbar'
+import Card2 from './Card';
+import Navbar from './Navbar'
+import styles from '../styles/Saved.module.css'
 
-export default function Home() {
+export default function Saved() {
 
     const [allVideos, setAllVideos] = useState([]);
 
@@ -29,11 +30,11 @@ export default function Home() {
     return (
         <div>
             <Navbar />
-            {
-                allVideos.map((element, index) => {
-                    return <Card2 key={index} filename={element.filename} author={element.author} amount={element.amount} equity={element.equity} likes={element.likes.length}/>
-                })
-            }
+            <div className={styles.container}>
+                {allVideos.map((element, index) => {
+                    return <Card2 key={index} filename={element.filename} author={element.author} amount={element.amount} equity={element.equity} likes={element.likes.length} />
+                })}
+            </div>
         </div>
     )
 }

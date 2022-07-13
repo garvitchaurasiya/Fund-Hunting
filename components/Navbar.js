@@ -6,12 +6,6 @@ import { Icon, Input, Dropdown } from "semantic-ui-react";
 
 export default function Navbar() {
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('username');
-    Router.push({pathname: "/login"})
-  }
-
   useEffect(() => {
 
     if (!localStorage.getItem('token')) {
@@ -20,6 +14,15 @@ export default function Navbar() {
 
   }, [])
 
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
+    Router.push({pathname: "/login"})
+  }
+
+  const handleYourProfile = ()=>{
+    Router.push({pathname: "/profile/"+localStorage.getItem('username')})
+  }
 
   return (
     <div className={styles.container}>
@@ -50,7 +53,7 @@ export default function Navbar() {
           <li>
             <Dropdown className={styles.dropdown} icon="user circle">
               <Dropdown.Menu>
-                <Dropdown.Item text='Your Profile' />
+                <Dropdown.Item onClick={handleYourProfile} text='Your Profile' />
                 <Dropdown.Item text='Your Posts'/>
                 <Dropdown.Item text='Bid Placed'/>
                 <Dropdown.Item text='Saved' />

@@ -4,9 +4,14 @@ import Navbar from '../components/Navbar';
 import 'semantic-ui-css/semantic.min.css';
 import styles from '../styles/Profile.module.css'
 import Videos from '../components/Videos';
+import Saved from '../components/Saved';
 
 
 export class Profile extends Component {
+
+    state = {
+        show: "saved"
+    }
 
     static async getInitialProps(props) {
 
@@ -30,6 +35,17 @@ export class Profile extends Component {
         }
     }
 
+    componentDidMount(){
+        console.log(this.state);
+        this.state.show = "posts"
+    }
+    a=()=>{
+        console.log("HI")
+        this.setState({
+            show: "posts"
+        })
+        console.log(this.state)
+    }
 
     render() {
         return (
@@ -43,13 +59,20 @@ export class Profile extends Component {
                     <hr />
                 </div>
                 <div className={styles.options}>
-                    <div>POSTS</div>
-                    <div>SAVED</div>
-                    <div>BIDED</div>
+                    <div onClick={this.a}>POSTS</div>
+                    <div onClick={()=>{this.setState({show: "saved"})}}>SAVED</div>
+                    <div onClick={()=>{this.setState({show: "bids"})}}>BIDS</div>
                 </div>
 
-                <div>
+                <div hidden={(this.state.show==="posts")?false:true}>
                     <Videos viewingProfile="true" username={this.props.username} />
+                </div>
+                <div hidden={(this.state.show==="saved")?false:true}>
+                    <Saved/>
+                </div>
+                <div hidden={(this.state.show==="bids")?false:true}>
+                    {/* <Videos viewingProfile="true" username={this.props.username} /> */}
+                    Bids
                 </div>
 
             </div>
