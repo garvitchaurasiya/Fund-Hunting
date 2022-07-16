@@ -98,5 +98,32 @@ router.post('/getuser',  async(req, res)=>{
 
 })
 
+router.post('/placedbids', fetchuser, async(req, res)=>{
+    try{
+        const user = await User.findOneAndUpdate({email: req.user.email},
+                {$push: {
+                    "placedBids": req.body.filename
+                }}
+            );
+        res.json({user})
+    } catch (error) {
+        console.error(error.message);
+        return res.status(400).json({error: "Internal Server Error"});
+
+    }
+})
+
+router.post('/getplacedbids', fetchuser, async(req, res)=>{
+    try{
+        const user = await User.findOne({email: req.user.email});
+        res.json({placedBids: user.placedBids});
+
+    } catch (error) {
+        console.error(error.message);
+        return res.status(400).json({error: "Internal Server Error"});
+
+    }
+})
+
 
 module.exports = router;

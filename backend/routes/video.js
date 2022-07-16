@@ -33,7 +33,7 @@ router.post('/upload', upload.single('file') ,async (req, res)=>{
     //     return res.json({success: true, filePath: res.req.file.path, fileName: req.req.file.filename})
     // })
 
-    await User.updateOne({name: req.body.user}, { $push: { "posts": req.file.filename } } );
+    await User.updateOne({username: req.body.username}, { $push: { "posts": req.file.filename } } );
 
     await Video.create({
         filename: req.file.filename,
@@ -248,6 +248,17 @@ router.post('/getcomments', fetchuser, async(req, res)=>{
     try {
         const video = await Video.findOne({filename: req.body.filename})
         res.json({comments: video.comments});
+        
+    } catch (error) {
+        console.error(error.message);
+        return res.status(400).json({success: false, error: "Internal Server Error"});
+    }
+})
+
+router.post('/getpostbyname', async(req, res)=>{
+    try {
+        const video = await Video.findOne({filename: req.body.filename})
+        res.json(video);
         
     } catch (error) {
         console.error(error.message);

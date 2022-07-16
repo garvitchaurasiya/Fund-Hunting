@@ -25,6 +25,9 @@ const UserSchema = new Schema({
     posts: {
         type: Array
     },
+    placedBids: {
+        type: Array
+    },
     date:{
         type:Date,
         default:Date.now

@@ -6,10 +6,24 @@ import styles from "../styles/Home.module.css"
 export default function Videos(props) {
 
   const [allVideos, setAllVideos] = useState([]);
+  const [allBids, setAllBids] = useState([]);
 
   useEffect(() => {
 
-    (props.viewingProfile)?getUserVideos():getAllVideos();
+    // // (props.getUserPosts)?getUserPosts():getAllVideos();
+
+    // if(props.getUserPosts){
+    //   console.log("posts");
+    //   getUserPosts();
+    // }
+    // // else if(props.getPlacedBids){
+    // //   console.log("bids")
+    // //   getPlacedBids();
+    // // }
+    // else{
+    //   console.log("all videos");
+      getAllVideos();
+    // }
 
   }, []);
 
@@ -26,33 +40,49 @@ export default function Videos(props) {
 
   }
 
-  const getUserVideos = async() =>{
-    const response = await fetch("http://localhost:5000/api/video/getuservideos",{
-      method: "POST",
-      headers: {
-        'Content-type':'application/json'
-      },
-      body: JSON.stringify({ username: props.username })
-    });
-    const json = await response.json();
-    setAllVideos(json);
+  // const getUserPosts = async() =>{
+  //   const response = await fetch("http://localhost:5000/api/video/getuservideos",{
+  //     method: "POST",
+  //     headers: {
+  //       'Content-type':'application/json'
+  //     },
+  //     body: JSON.stringify({ username: props.username })
+  //   });
+  //   const json = await response.json();
+  //   setAllVideos(json);
 
-  }
+  // }
 
-  const getLikes = async (filename) => {
-    const response = await fetch("http://localhost:5000/api/video/getlikes", {
-      method: "POST",
-      headers: {
-        'Content-type': 'application/json',
-      },
-      body: JSON.stringify({ filename })
-    });
-    const json = await response.json();
+  // const getPlacedBids = async() =>{
+  //   const response = await fetch("http://localhost:5000/api/auth/getplacedbids",{
+  //     method: "POST",
+  //     headers: {
+  //       'Content-type':'application/json',
+  //       'auth-token': localStorage.getItem('token')
+  //     },
+  //   });
+  //   const json = await response.json();
+  //   setAllBids(json.placedBids);
+  //   console.log("allbids", allBids);
 
-    // setLikes(json);
-    console.log(json.likes);
+  //   allBids.map((e, index) => {
+  //     console.log("e", e);
+  //   })
+  //   // allBids.map(async(e, index) => {
+  //   //   const response = await fetch("http://localhost:5000/api/video/getpostbyname",{
+  //   //     method: "POST",
+  //   //     headers: {
+  //   //       'Content-type':'application/json',
+  //   //     },
+  //   //     body: JSON.stringify({filename: e})
+  //   //   });
+  //   //   const json = await response.json();
+  //   //   setAllVideos(json.placedBids);
+  //   //   console.log(json);
+  //   // })
 
-  }
+
+  // }
 
   return (
     <div>

@@ -29,7 +29,6 @@ export default function Saved() {
 
     return (
         <div>
-            <Navbar />
             <div className={styles.container}>
                 {allVideos.map((element, index) => {
                     return <Card2 key={index} filename={element.filename} author={element.author} amount={element.amount} equity={element.equity} likes={element.likes.length} />

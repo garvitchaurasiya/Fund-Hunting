@@ -136,7 +136,6 @@ function Card2(props) {
 
   const getAllBids = async (e) => {
     e.preventDefault();
-    console.log(localStorage.getItem('username'));
 
     const res = await fundhunting.methods.getPlacedBids(props.filename).call();
 
@@ -224,10 +223,22 @@ function Card2(props) {
       from: accounts[0],
       value: web3.utils.toWei('0.001', 'ether')
     })
-
-    const res = await fundhunting.methods.getPlacedBids(props.filename).call();
-    setBids(res);
-    console.log("Placed")
+    
+    if (success) {
+      console.log("Placed")
+      const res = await fundhunting.methods.getPlacedBids(props.filename).call();
+      setBids(res);
+      const response = await fetch("http://localhost:5000/api/auth/placedbids", {
+        method: "POST",
+        headers: {
+          'Content-type': 'application/json',
+          'auth-token': localStorage.getItem('token')
+        },
+        body: JSON.stringify({ filename: props.filename })
+      });
+      const json = await response.json();
+      console.log(json);
+    }
 
     setTimeout(() => {
       var myDiv = document.getElementById("bidsContainer");
@@ -255,7 +266,7 @@ function Card2(props) {
   }
 
   const showCommentsModal = () => {
-    return  <Modal
+    return <Modal
       className={modalstyles.container}
       trigger={<div onClick={getAllComments}><Icon size="large" name='comment outline' /> Comment</div>}
     // trigger={<div><Icon size="large" name='comment outline' /> Comment</div>}
