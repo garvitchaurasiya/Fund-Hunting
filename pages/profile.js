@@ -54,21 +54,32 @@ export class Profile extends Component {
                     <hr />
                 </div>
                 <div className={styles.options}>
-                    <div onClick={()=>{this.setState({show: "posts"})}}>POSTS</div>
-                    <div onClick={()=>{this.setState({show: "saved"})}}>SAVED</div>
-                    <div onClick={()=>{this.setState({show: "bids"})}}>BIDS</div>
+                    <div
+                        onClick={()=>{this.setState({show: "posts"})}}
+                        style={{"borderBottom":this.state.show==="posts"?"3px solid black":""}}>
+                            POSTS
+                    </div>
+                    <div
+                        onClick={()=>{this.setState({show: "saved"})}} 
+                        style={{"borderBottom":this.state.show==="saved"?"3px solid black":""}}>
+                            SAVED
+                    </div>
+                    <div
+                        onClick={()=>{this.setState({show: "bids"})}} 
+                        style={{"borderBottom":this.state.show==="bids"?"3px solid black":""}}>
+                            BIDS
+                    </div>
                 </div>
 
-                <div hidden={(this.state.show==="posts")?false:true}>
+                <div hidden={(this.state.show==="posts")?false:true} >
                     <UserPosts username={this.props.username}/>
                 </div>
 
-                <div hidden={(this.state.show==="saved")?false:true}>
+                <div hidden={(this.state.show==="saved")?false:true} >
                     <Saved/>
                 </div>
 
-                <div hidden={(this.state.show==="bids")?false:true}>
-                {/* <div> */}
+                <div hidden={(this.state.show==="bids")?false:true} >
                     <PlacedBids/>
                 </div>
 

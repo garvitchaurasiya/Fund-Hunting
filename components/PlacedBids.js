@@ -25,6 +25,7 @@ export class PlacedBids extends Component {
         const json = await response.json();
 
         this.setState({allBids: json.placedBids}, ()=>{
+        
             this.state.allBids.map( async(e, index) => {
                 const response = await fetch("http://localhost:5000/api/video/getpostbyname", {
                     method: "POST",
@@ -34,14 +35,13 @@ export class PlacedBids extends Component {
                     body: JSON.stringify({ filename: e })
                 });
                 const json = await response.json();
-                
-                this.setState({ allVideos: [...this.state.allVideos, json] }, ()=>{
-                    console.log("yes", json);
-                    console.log("callback", this.state.allVideos);
-                })
+                this.state.allVideos.push(json)
 
             })
+            
+        
         });
+        console.log("state", this.state);
     }
 
     render() {

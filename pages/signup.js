@@ -23,7 +23,7 @@ export default function signup() {
         if (json.success) {
             // Save the auth Token and redirect
             localStorage.setItem('token', json.authToken);
-            localStorage.setItem('user', json.user);
+            localStorage.setItem('username', json.username);
             Router.push({pathname: '/'})
 
         }

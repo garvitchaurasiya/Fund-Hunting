@@ -9,6 +9,8 @@ export default function Home() {
   let a;
   const [userName, setUserName] = useState("")
   useEffect(() => {
+    console.log('a', userName);
+
     setUserName(localStorage.getItem("username"));
   }, [])
 

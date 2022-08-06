@@ -11,6 +11,6 @@
     justify-content: center;
 }
 .options div{
-    margin: 10px 25px;
+    padding: 10px 25px;
     cursor: pointer;
 }
