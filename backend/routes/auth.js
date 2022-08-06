@@ -125,5 +125,18 @@ router.post('/getplacedbids', fetchuser, async(req, res)=>{
     }
 })
 
+router.post('/authoriseUser', fetchuser, async(req, res)=>{
+
+    try {
+        const user = await User.findOne({email: req.user.email})
+        res.json({user});
+
+    } catch (error) {
+        console.error(error.message);
+        return res.status(400).json({success, error: "Invalid Email"});
+
+    }
+
+})
 
 module.exports = router;

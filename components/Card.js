@@ -3,7 +3,7 @@ import { Card, Header, Modal, Icon } from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
 import modalstyles from '../styles/VideoModal.module.css'
 import styles from '../styles/Card.module.css';
-import Link from 'next/link'
+import Link from 'next-routes';
 import VisibilitySensor from 'react-visibility-sensor';
 import web3 from '../ethereum/web3';
 import fundhunting from '../ethereum/fundhunting';
@@ -200,7 +200,11 @@ function Card2(props) {
       return {
         key: index,
         header: ele.comment,
-        meta: ele.username,
+        meta: (
+          // <Link href={`/profile/${ele.username}`}>
+            <a href={`/profile/${ele.username}`}>{ele.username}</a>
+          // </Link>
+          ),
         fluid: true,
       };
     });

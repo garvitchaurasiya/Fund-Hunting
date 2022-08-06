@@ -3,7 +3,7 @@ import { Icon } from 'semantic-ui-react';
 import Navbar from '../components/Navbar';
 import 'semantic-ui-css/semantic.min.css';
 import styles from '../styles/Profile.module.css'
-import Videos from '../components/Videos';
+// import Videos from '../components/Videos';
 import Saved from '../components/Saved';
 import UserPosts from '../components/UserPosts';
 import PlacedBids from '../components/PlacedBids';
@@ -12,7 +12,8 @@ import PlacedBids from '../components/PlacedBids';
 export class Profile extends Component {
 
     state = {
-        show: "posts"
+        show: "posts",
+        authorised: false
     }
 
     static async getInitialProps(props) {
@@ -22,7 +23,7 @@ export class Profile extends Component {
         const response = await fetch("http://localhost:5000/api/auth/getuser", {
             method: "POST",
             headers: {
-                'Content-type': 'application/json'
+                'Content-type': 'application/json',
             },
 
             body: JSON.stringify({ username })
@@ -33,13 +34,14 @@ export class Profile extends Component {
         return {
             username: json.user.username,
             email: json.user.email,
-            mobileNumber: json.user.mobileNumber
+            mobileNumber: json.user.mobileNumber,
         }
     }
 
     componentDidMount(){
-        console.log(this.state);
-        this.state.show = "posts"
+        if(localStorage.getItem("username")){
+            this.setState({authorised: (localStorage.getItem("username")!==this.props.username)});
+        }        
     }
 
     render() {
@@ -51,6 +53,7 @@ export class Profile extends Component {
                         <Icon name="user circle" size="massive" />
                     </div>
                     <h2>{this.props.username}</h2>
+                    {console.log(this.state.authorised)}
                     <hr />
                 </div>
                 <div className={styles.options}>
@@ -60,26 +63,28 @@ export class Profile extends Component {
                             POSTS
                     </div>
                     <div
+                        hidden={this.state.authorised}
                         onClick={()=>{this.setState({show: "saved"})}} 
                         style={{"borderBottom":this.state.show==="saved"?"3px solid black":""}}>
                             SAVED
                     </div>
                     <div
+                        hidden={this.state.authorised}
                         onClick={()=>{this.setState({show: "bids"})}} 
                         style={{"borderBottom":this.state.show==="bids"?"3px solid black":""}}>
                             BIDS
                     </div>
                 </div>
-
+                
                 <div hidden={(this.state.show==="posts")?false:true} >
                     <UserPosts username={this.props.username}/>
                 </div>
 
-                <div hidden={(this.state.show==="saved")?false:true} >
+                <div hidden={(this.state.show==="saved"?false:true)} >
                     <Saved/>
                 </div>
 
-                <div hidden={(this.state.show==="bids")?false:true} >
+                <div hidden={(this.state.show==="bids"?false:true)} >
                     <PlacedBids/>
                 </div>
 
