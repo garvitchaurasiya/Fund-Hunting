@@ -15,8 +15,7 @@ export default function UserPosts(props) {
             body: JSON.stringify({ username: props.username })
         });
         const json = await response.json();
-        setAll(json);
-        console.log(props.username, json);
+        setAll(json.reverse());
 
     }
 

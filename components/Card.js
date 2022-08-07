@@ -3,7 +3,7 @@ import { Card, Header, Modal, Icon } from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
 import modalstyles from '../styles/VideoModal.module.css'
 import styles from '../styles/Card.module.css';
-import Link from 'next-routes';
+import {Link} from '../routes';
 import VisibilitySensor from 'react-visibility-sensor';
 import web3 from '../ethereum/web3';
 import fundhunting from '../ethereum/fundhunting';
@@ -17,6 +17,8 @@ function Card2(props) {
   const [isMuted, setIsMuted] = useState(true);
   const [bids, setBids] = useState([]);
   const [comments, setComments] = useState([]);
+
+  const Arr = [];
 
   const videoRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -69,7 +71,6 @@ function Card2(props) {
 
   const onChange = (e) => {
     setState({ ...state, [e.target.name]: e.target.value })
-    console.log(state);
   }
 
   const toggleLike = async () => {
@@ -135,17 +136,15 @@ function Card2(props) {
   }
 
   const getAllBids = async (e) => {
-    e.preventDefault();
+    // e.preventDefault();
 
     const res = await fundhunting.methods.getPlacedBids(props.filename).call();
-
     setBids(res);
 
   }
 
   const addNewComment = async (e) => {
     e.preventDefault();
-    console.log(state.comment);
 
     await fetch("http://localhost:5000/api/video/comment", {
       method: "POST",
@@ -166,7 +165,7 @@ function Card2(props) {
     });
     const json = await response.json();
 
-    setComments(json.comments);
+    setComments(json.comments.reverse());
 
     setTimeout(() => {
       var myDiv = document.getElementById("commentsContainer");
@@ -187,10 +186,8 @@ function Card2(props) {
       body: JSON.stringify({ filename: props.filename })
     });
     const json = await response.json();
-
+    json.comments.reverse();
     setComments(json.comments);
-
-
 
   }
 
@@ -201,9 +198,7 @@ function Card2(props) {
         key: index,
         header: ele.comment,
         meta: (
-          // <Link href={`/profile/${ele.username}`}>
-            <a href={`/profile/${ele.username}`}>{ele.username}</a>
-          // </Link>
+            <Link route={`/profile/${ele.bidPlacer}?show=posts`}>{ele.username}</Link>
           ),
         fluid: true,
       };
@@ -258,9 +253,7 @@ function Card2(props) {
         header: ele.amount,
         meta: ele.equity,
         description: (
-          <Link href='/'>
-            <a>{ele.bidPlacer}</a>
-          </Link>
+            <Link route={`/profile/${ele.bidPlacer}?show=posts`}>{ele.bidPlacer}</Link>
         ),
         fluid: true,
       };

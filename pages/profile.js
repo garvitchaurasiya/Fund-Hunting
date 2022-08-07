@@ -35,13 +35,15 @@ export class Profile extends Component {
             username: json.user.username,
             email: json.user.email,
             mobileNumber: json.user.mobileNumber,
+            show: props.query.show
         }
     }
 
     componentDidMount(){
         if(localStorage.getItem("username")){
             this.setState({authorised: (localStorage.getItem("username")!==this.props.username)});
-        }        
+        }
+        this.setState({show: this.props.show}); 
     }
 
     render() {
@@ -53,26 +55,28 @@ export class Profile extends Component {
                         <Icon name="user circle" size="massive" />
                     </div>
                     <h2>{this.props.username}</h2>
-                    {console.log(this.state.authorised)}
                     <hr />
                 </div>
                 <div className={styles.options}>
+                    
                     <div
                         onClick={()=>{this.setState({show: "posts"})}}
-                        style={{"borderBottom":this.state.show==="posts"?"3px solid black":""}}>
+                        style={{"borderBottom":this.state.show==="posts"?"3px solid black":"none"}}>
                             POSTS
                     </div>
-                    <div
-                        hidden={this.state.authorised}
-                        onClick={()=>{this.setState({show: "saved"})}} 
-                        style={{"borderBottom":this.state.show==="saved"?"3px solid black":""}}>
-                            SAVED
-                    </div>
+
                     <div
                         hidden={this.state.authorised}
                         onClick={()=>{this.setState({show: "bids"})}} 
-                        style={{"borderBottom":this.state.show==="bids"?"3px solid black":""}}>
+                        style={{"borderBottom":this.state.show==="bids"?"3px solid black":"none"}}>
                             BIDS
+                    </div>
+
+                    <div
+                        hidden={this.state.authorised}
+                        onClick={()=>{this.setState({show: "saved"})}} 
+                        style={{"borderBottom":this.state.show==="saved"?"3px solid black":"none"}}>
+                            SAVED
                     </div>
                 </div>
                 
@@ -80,12 +84,12 @@ export class Profile extends Component {
                     <UserPosts username={this.props.username}/>
                 </div>
 
-                <div hidden={(this.state.show==="saved"?false:true)} >
-                    <Saved/>
-                </div>
-
                 <div hidden={(this.state.show==="bids"?false:true)} >
                     <PlacedBids/>
+                </div>
+
+                <div hidden={(this.state.show==="saved"?false:true)} >
+                    <Saved/>
                 </div>
 
             </div>

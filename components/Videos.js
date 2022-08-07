@@ -36,7 +36,7 @@ export default function Videos(props) {
 
     });
     const json = await response.json();
-    setAllVideos(json);
+    setAllVideos(json.reverse());
 
   }
 

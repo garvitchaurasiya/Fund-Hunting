@@ -64,10 +64,10 @@ export default function Post() {
                             <div>
                                 <h1 className={styles.heading}>
                                     Post A Video
-                                    {/* <Icon name="user circle" />                                     */}
+                                    {/* <Icon name="user circle" />*/}
                                 </h1>
                                 <form onSubmit={handleOnSubmit} encType="multipart/form-data">
-                                    <label className={styles.uploadFileLogo} htmlFor="uploadFile"><Icon name="upload" size="huge" /></label>
+                                    <label className={styles.uploadFileLogo} htmlFor="uploadFile"><Icon name="plus" size="massive" /></label>
                                     <input id="uploadFile" hidden type="file" filename="file" onChange={onChangeFile} />
                                     <i className="fa-solid fa-plus" style={{"fontSize":"20px"}}></i>
                                     

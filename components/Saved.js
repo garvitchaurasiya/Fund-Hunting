@@ -18,7 +18,7 @@ export default function Saved() {
         });
         const json = await response.json();
 
-        setAllVideos(json.saved);
+        setAllVideos(json.saved.reverse());
 
     }
 

@@ -1,15 +1,17 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from '../styles/Navbar.module.css'
 import Link from 'next/link'
-import Router from 'next/router'
+import {Router} from '../routes';
 import { Icon, Input, Dropdown } from "semantic-ui-react";
 
 export default function Navbar() {
-
+  const [userName, setuserName] = useState("")
   useEffect(() => {
 
     if (!localStorage.getItem('token')) {
       Router.push({ pathname: '/login' })
+    }else{
+      setuserName(localStorage.getItem('username'));
     }
 
   }, [])
@@ -17,13 +19,9 @@ export default function Navbar() {
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
-    Router.push({pathname: "/login"})
+    Router.pushRoute("/login")
   }
-
-  const handleYourProfile = ()=>{
-    Router.push({pathname: "/profile/"+localStorage.getItem('username')})
-  }
-
+  
   return (
     <div className={styles.container}>
       <div className={styles.fundhunting}>
@@ -45,18 +43,24 @@ export default function Navbar() {
             </Link>
           </li>
           <li>
-            <Link href="/saved">
+            <Link href={`/profile/${userName}?show=saved`}>
               <Icon size="large" name="bookmark" />
             </Link>
           </li>
 
           <li>
-            <Dropdown className={styles.dropdown} icon="user circle">
+            <Dropdown className={styles.dropdown} icon={{name: 'user circle', size:'large'}}  >
               <Dropdown.Menu>
-                <Dropdown.Item onClick={handleYourProfile} text='Your Profile' />
-                <Dropdown.Item text='Your Posts'/>
-                <Dropdown.Item text='Bid Placed'/>
-                <Dropdown.Item text='Saved' />
+                <Dropdown.Item onClick={()=>{Router.pushRoute(`/profile/${userName}?show=posts`)}}>
+                    Your Profile
+                </Dropdown.Item>
+                <Dropdown.Item onClick={()=>{Router.pushRoute(`/profile/${userName}?show=bids`)}} >
+                    Bid Placed
+                </Dropdown.Item>
+                <Dropdown.Item onClick={()=>{Router.pushRoute(`/profile/${userName}?show=saved`)}}>
+                    Saved 
+                </Dropdown.Item>
+
                 <Dropdown.Divider />
                 <Dropdown.Item onClick={handleLogout} text='Logout' />
               </Dropdown.Menu>

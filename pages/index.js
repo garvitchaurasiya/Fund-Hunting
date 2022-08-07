@@ -3,14 +3,12 @@ import { Icon } from 'semantic-ui-react'
 import Navbar from '../components/Navbar'
 import Videos from '../components/Videos'
 import styles from '../styles/Home.module.css'
-import Link from 'next/link'
+import {Link} from '../routes';
 
 export default function Home() {
-  let a;
+  
   const [userName, setUserName] = useState("")
   useEffect(() => {
-    console.log('a', userName);
-
     setUserName(localStorage.getItem("username"));
   }, [])
 
@@ -33,23 +31,24 @@ export default function Home() {
           <div className={styles.optionsContainer}>
 
             <div className={styles.options}>
-              <Link href="/">
+              <Link route={`/profile/${userName}?show=posts`}>
                 Posts
               </Link>
             </div>
 
             <div className={styles.options}>
-              <Link href="/">
+              <Link route={`/profile/${userName}?show=bids`}>
                 Bid Placed
               </Link>
             </div>
             <div className={styles.options}>
-              <Link href="/saved">
+              <Link route={`/profile/${userName}?show=saved`}>
                 Saved
               </Link>
             </div>
           </div>
         </div>
+
         <div>
           <Videos />
         </div>
