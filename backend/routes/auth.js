@@ -139,4 +139,18 @@ router.post('/authoriseUser', fetchuser, async(req, res)=>{
 
 })
 
+router.get('/allusers', async(req, res)=>{
+
+    try {
+        const users = await User.find()
+        res.json({users});
+
+    } catch (error) {
+        console.error(error.message);
+        return res.status(400).json({success, error: "Internal Server Error"});
+
+    }
+
+})
+
 module.exports = router;
