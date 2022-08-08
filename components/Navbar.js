@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styles from '../styles/Navbar.module.css'
-import Link from 'next/link'
-import { Router } from '../routes';
+import { Router, Link} from '../routes';
 import { Icon, Input, Dropdown } from "semantic-ui-react";
 
 export default function Navbar() {
@@ -15,7 +14,7 @@ export default function Navbar() {
     } else {
       setuserName(localStorage.getItem('username'));
     }
-    changeSearchTerm();
+    // changeSearchTerm();
 
   }, [])
 
@@ -26,19 +25,19 @@ export default function Navbar() {
   }
 
   const filterContent = (users, searchTerm) => {
-    // const result = users.filter((user) => user.username.toLowerCase().includes(searchTerm.toLowerCase()));
-    // console.log(result);
-    // result.map((element, index)=>{
-    //   setSearchedUsers(oldArray => [...oldArray, {key: index, text: element.username}])
-    //   setSearchedUsers(oldArray => [...oldArray, {key: index, text: element.username}])
-    //   setSearchedUsers(oldArray => [...oldArray, {key: index, text: element.username}])
-    // })
-    // setSearchedUsers(result);
+    const result = users.filter((user) => user.username.toLowerCase().includes(searchTerm.toLowerCase()));
+    console.log(result);
+    setSearchedUsers(result);
   }
 
   const changeSearchTerm = async (e) => {
     // setSearchTerm({...searchTerm, [e.target.name]:e.target.value});
-    // searchTerm = e.target.value;
+    searchTerm = e.target.value;
+    if(searchTerm===""){
+      document.getElementById("searchResults").style.display = "none";
+    }else{
+      document.getElementById("searchResults").style.display = "block";
+    }
     const response = await fetch("http://localhost:5000/api/auth/allusers", {
       method: "GET",
       headers: {
@@ -46,13 +45,22 @@ export default function Navbar() {
       },
     })
     const json = await response.json();
-    // console.log(json);
-    // filterContent(json.users, searchTerm);
-    json.users.map((element, index)=>{
-      setSearchedUsers(oldArray => [...oldArray, {key: index, text: element.username}])
-      // setSearchedUsers(oldArray => [...oldArray, {key: index, text: element.username}])
-      // setSearchedUsers(oldArray => [...oldArray, {key: index, text: element.username}])
-    })
+    console.log(json);
+    filterContent(json.users, searchTerm);
+    // json.users.map((element, index)=>{
+    //   setSearchedUsers(oldArray => [...oldArray, {key: index, text: element.username}])
+    //   // setSearchedUsers(oldArray => [...oldArray, {key: index, text: element.username}])
+    //   // setSearchedUsers(oldArray => [...oldArray, {key: index, text: element.username}])
+    // })
+  }
+  function onFocus() {
+    document.getElementById("searchBar").focus();
+  }
+  
+  if(typeof window !== "undefined" ){
+    document.body.addEventListener('click', ()=>{
+      document.getElementById("searchResults").style.display = "none";
+    }); 
   }
 
   return (
@@ -61,31 +69,33 @@ export default function Navbar() {
         Fund Hunting
       </div>
       <div className={styles.search}>
-        {/* <Input icon="search" placeholder='Search' onChange={changeSearchTerm} /> */}
-        <Dropdown
-          icon=""
-          placeholder='Search'
-          fluid
-          search
-          selection
-          // onChange={changeSearchTerm}
-          options={searchedUsers}
-        />
+
+        <input id="searchBar" onClick={onFocus} className={styles.searchBar} autoComplete="off" placeholder='Search' onChange={changeSearchTerm} />
+        {/* <Input className={styles.searchBar} icon="search" placeholder='Search' onChange={changeSearchTerm} /> */}
+        
+        <div id="searchResults" className={styles.searchResults}>
+          {searchedUsers.map((ele, index) => {
+            return <Link key={index} route={`/profile/${ele.username}/?show=posts`}>
+                      <div>{ele.username}</div>
+                    </Link>
+          })}
+        </div>
+
       </div>
       <div>
         <ul className={styles.list}>
           <li>
-            <Link href="/">
+            <Link route="/">
               <Icon size="large" name="home" />
             </Link>
           </li>
           <li>
-            <Link href="/video/post">
+            <Link route="/video/post">
               <Icon size="large" name="add square" />
             </Link>
           </li>
           <li>
-            <Link href={`/profile/${userName}?show=saved`}>
+            <Link route={`/profile/${userName}?show=saved`}>
               <Icon size="large" name="bookmark" />
             </Link>
           </li>

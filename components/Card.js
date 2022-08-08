@@ -198,7 +198,7 @@ function Card2(props) {
         key: index,
         header: ele.comment,
         meta: (
-            <Link route={`/profile/${ele.bidPlacer}?show=posts`}>{ele.username}</Link>
+            <Link route={`/profile/${ele.username}?show=posts`}>{ele.username}</Link>
           ),
         fluid: true,
       };
