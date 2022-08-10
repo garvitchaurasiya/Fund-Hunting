@@ -10,7 +10,7 @@ export default function Login() {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        const response = await fetch("https://fund-hunting.vercel.app/login", {
+        const response = await fetch(`https://fund-hunting.vercel.app/${process.env.PORT}/auth/login`, {
             method: "POST",
             headers: {
                 'Content-type': 'application/json'
