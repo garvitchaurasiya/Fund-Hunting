@@ -11,11 +11,13 @@
 }
 .fundhunting{
     width: 30vw;
+    color: black;
     display: flex;
     justify-content: center;
     font-family:cursive;
     font-weight: bold;
     font-size: 20px;
+    cursor: pointer;
 }
 .search{
     width: 30vw;

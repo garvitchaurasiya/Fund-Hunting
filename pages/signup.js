@@ -3,7 +3,7 @@ import styles from '../styles/Login.module.css'
 import Link from 'next/link';
 import Router from 'next/router';
 
-export default function signup() {
+export default function Signup() {
 
     const [credentials, setCredentials] = useState({ username: "", email: "", mobileNumber:"", password: "" });
     const handleSignup = async (e) => {

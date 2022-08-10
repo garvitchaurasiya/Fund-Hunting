@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styles from '../styles/Navbar.module.css'
-import { Router, Link} from '../routes';
+import { Router, Link } from '../routes';
 import { Icon, Input, Dropdown } from "semantic-ui-react";
 
 export default function Navbar() {
@@ -33,9 +33,9 @@ export default function Navbar() {
   const changeSearchTerm = async (e) => {
     // setSearchTerm({...searchTerm, [e.target.name]:e.target.value});
     searchTerm = e.target.value;
-    if(searchTerm===""){
+    if (searchTerm === "") {
       document.getElementById("searchResults").style.display = "none";
-    }else{
+    } else {
       document.getElementById("searchResults").style.display = "block";
     }
     const response = await fetch("http://localhost:5000/api/auth/allusers", {
@@ -56,28 +56,32 @@ export default function Navbar() {
   function onFocus() {
     document.getElementById("searchBar").focus();
   }
-  
-  if(typeof window !== "undefined" ){
-    document.body.addEventListener('click', ()=>{
-      document.getElementById("searchResults").style.display = "none";
-    }); 
+
+  if (typeof window !== "undefined") {
+    document.body.addEventListener('click', () => {
+      if(document.getElementById("searchResults")){
+        document.getElementById("searchResults").style.display = "none";
+      }
+    });
   }
 
   return (
     <div className={styles.container}>
-      <div className={styles.fundhunting}>
-        Fund Hunting
-      </div>
+      <Link route="/" style={{ "color": "black" }}>
+        <div className={styles.fundhunting}>
+          Fund Hunting
+        </div>
+      </Link>
       <div className={styles.search}>
 
         <input id="searchBar" onClick={onFocus} className={styles.searchBar} autoComplete="off" placeholder='Search' onChange={changeSearchTerm} />
         {/* <Input className={styles.searchBar} icon="search" placeholder='Search' onChange={changeSearchTerm} /> */}
-        
+
         <div id="searchResults" className={styles.searchResults}>
           {searchedUsers.map((ele, index) => {
             return <Link key={index} route={`/profile/${ele.username}/?show=posts`}>
-                      <div>{ele.username}</div>
-                    </Link>
+              <div>{ele.username}</div>
+            </Link>
           })}
         </div>
 

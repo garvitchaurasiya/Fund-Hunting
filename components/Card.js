@@ -18,8 +18,6 @@ function Card2(props) {
   const [bids, setBids] = useState([]);
   const [comments, setComments] = useState([]);
 
-  const Arr = [];
-
   const videoRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
 

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Router from 'next/router'
 
 
-export default function login() {
+export default function Login() {
 
     const [credentials, setCredentials] = useState({ email: "", password: "" });
 
