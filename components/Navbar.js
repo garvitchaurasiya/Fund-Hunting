@@ -47,11 +47,6 @@ export default function Navbar() {
     const json = await response.json();
     console.log(json);
     filterContent(json.users, searchTerm);
-    // json.users.map((element, index)=>{
-    //   setSearchedUsers(oldArray => [...oldArray, {key: index, text: element.username}])
-    //   // setSearchedUsers(oldArray => [...oldArray, {key: index, text: element.username}])
-    //   // setSearchedUsers(oldArray => [...oldArray, {key: index, text: element.username}])
-    // })
   }
   function onFocus() {
     document.getElementById("searchBar").focus();

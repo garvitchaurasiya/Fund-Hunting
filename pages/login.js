@@ -10,7 +10,7 @@ export default function Login() {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        const response = await fetch("http://localhost:5000/api/auth/login", {
+        const response = await fetch("https://fund-hunting.vercel.app/login", {
             method: "POST",
             headers: {
                 'Content-type': 'application/json'
