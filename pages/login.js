@@ -10,7 +10,10 @@ export default function Login() {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        const response = await fetch(`https://fund-hunting.vercel.app/api/auth/login`, {
+        // const response = await fetch("http://localhost:5000/api/auth/login", {
+        console.log(process.env.HOST);
+        const response = await fetch("https://fundhunting.herokuapp.com/api/auth/login", {
+            // mode: 'no-cors',
             method: "POST",
             headers: {
                 'Content-type': 'application/json'
@@ -19,12 +22,13 @@ export default function Login() {
 
         });
         console.log(credentials.email, credentials.password);
+        console.log(response);
         const json = await response.json();
+        console.log(json);
         if (json.success) {
             // Save the auth Token and redirect
             localStorage.setItem('token', json.authToken);
             localStorage.setItem('username', json.username);
-            // navigate('/');
             Router.push({pathname: '/'})
         }
         else {

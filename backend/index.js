@@ -9,6 +9,8 @@ const port = process.env.PORT || 5000
 connectToMongo();
 app.use(cors())
 
+require('dotenv').config({ path: "./config/dev.env" })
+
 app.use(express.json());
 
 app.get('/', (req, res) => {

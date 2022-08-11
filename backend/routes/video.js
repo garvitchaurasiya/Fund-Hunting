@@ -25,6 +25,8 @@ var storage = multer.diskStorage({
 var upload = multer({ storage });
 
 router.post('/upload', upload.single('file') ,async (req, res)=>{
+    res.setHeader('Access-Control-Allow-Origin', '*') 
+
     // upload(req, res, err => {
     //     if(err){
     //         console.log(err);
